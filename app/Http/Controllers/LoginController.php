@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -43,8 +45,26 @@ class LoginController extends Controller
 
     public function register(Request $request)
     {
-        // Lógica para registrar al usuario
+        // Validar los datos de registro
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+    
+        // Crear el nuevo usuario
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+            'role_id' => 2, // Asegúrate de que este ID existe en la tabla `roles`
+        ]);
+    
+        // Redirigir al usuario a la página de inicio de sesión
+        return redirect()->route('login.form')->with('success', 'Cuenta creada exitosamente. Por favor, inicia sesión.');
     }
+    
+    
 
     public function logout(Request $request)
     {

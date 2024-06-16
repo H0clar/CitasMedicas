@@ -69,6 +69,26 @@
                     </button>
                 </div>
 
+                <!-- Mostrar mensajes de error -->
+                @if ($errors->any())
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                        <strong class="font-bold">¡Vaya!</strong>
+                        <span class="block sm:inline">Hay algunos problemas con tu entrada.</span>
+                        <ul class="mt-3 list-disc list-inside text-sm text-red-600">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <!-- Mostrar mensajes de éxito -->
+                @if (session('success'))
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                        <span class="block sm:inline">{{ session('success') }}</span>
+                    </div>
+                @endif
+
                 <!-- Formulario de login -->
                 <form id="loginForm" action="{{ route('login.submit') }}" method="post" class="space-y-6">
                     @csrf
@@ -99,6 +119,10 @@
                     <div>
                         <label for="registerPassword" class="text-sm font-medium text-gray-700 block mb-2">Contraseña</label>
                         <input type="password" id="registerPassword" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                    </div>
+                    <div>
+                        <label for="registerPasswordConfirmation" class="text-sm font-medium text-gray-700 block mb-2">Confirmar Contraseña</label>
+                        <input type="password" id="registerPasswordConfirmation" name="password_confirmation" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
                     </div>
                     <div>
                         <button type="submit" class="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition duration-300">Registrarse</button>
