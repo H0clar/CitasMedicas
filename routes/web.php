@@ -11,10 +11,10 @@ Route::get('/', function () {
 });
 
 // Rutas de autenticación
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.form');
-Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
-Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('register.form');
-Route::post('/register', [LoginController::class, 'register'])->name('register.submit');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [LoginController::class, 'register'])->name('register');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Rutas sin protección de middleware de autenticación
