@@ -1,23 +1,14 @@
-<!-- resources/views/citas/usuario/citasuser.blade.php -->
-
 @extends('layouts.dashboard')
 
 @section('title', 'Mis Citas')
 
 @section('content')
-<div class="min-h-screen flex flex-col items-center bg-gray-100 p-4">
+<div x-data="calendarApp()" x-init="initCalendar" class="min-h-screen flex flex-col items-center bg-gray-100 p-4">
     <div class="w-full max-w-6xl">
         <h1 class="text-4xl font-bold text-purple-700 text-center mb-8">Mis Citas</h1>
-        
-        <!-- Botón para agendar una nueva cita -->
-        <div class="text-center mb-6">
-            <a href="{{ url('/schedule-appointment') }}" class="bg-purple-500 text-white py-2 px-4 rounded-full hover:bg-purple-600 transition duration-300 shadow-md">
-                Agendar Nueva Cita
-            </a>
-        </div>
 
         <!-- Calendario -->
-        <div x-data="calendarApp()" x-init="initCalendar" class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+        <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
             <div class="flex items-center justify-between mb-4">
                 <button @click="prevMonth" class="text-purple-500 hover:text-purple-700">
                     &lt;
@@ -38,8 +29,9 @@
                 </template>
 
                 <template x-for="date in daysInMonth" :key="date">
-                    <div @click="openModal(date)" class="relative p-2 sm:p-2 border rounded-lg flex items-center justify-center h-20 sm:h-auto cursor-pointer" 
-                         :class="{'bg-purple-200': isToday(date), 'bg-gray-100': !isToday(date)}">
+                    <div class="relative p-2 sm:p-2 border rounded-lg flex items-center justify-center h-20 sm:h-auto cursor-pointer" 
+                         :class="{'bg-purple-200': isToday(date), 'bg-gray-100': !isToday(date)}"
+                         @click="openModal(date)">
                         <span class="absolute top-0 right-0 mt-1 mr-1 text-xs sm:text-sm" x-text="date"></span>
                         <!-- Marcar el día con cita en dispositivos móviles -->
                         <template x-if="getAppointments(date).length > 0">
@@ -63,28 +55,43 @@
                 </template>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Modal -->
-<div x-show="open" class="fixed inset-0 flex items-center justify-center z-50" style="display: none;">
-    <div class="absolute inset-0 bg-gray-900 opacity-50" @click="open = false"></div>
-    <div class="bg-white rounded-lg shadow-lg p-6 z-10">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold text-purple-700">Citas del día <span x-text="date"></span></h2>
-            <button @click="open = false" class="text-gray-500 hover:text-gray-700">&times;</button>
-        </div>
-        <template x-if="appointments.length === 0">
-            <p class="text-gray-600">No hay citas para este día.</p>
-        </template>
-        <template x-for="appointment in appointments" :key="appointment.id">
-            <div class="bg-white shadow-md rounded-lg p-2 mb-2 text-sm">
-                <p class="font-semibold" x-text="appointment.time"></p>
-                <p x-text="appointment.doctor"></p>
-                <p x-text="appointment.specialty"></p>
-                <div class="flex justify-between mt-2">
-                    <a href="#" class="text-blue-500 hover:underline">Ver</a>
-                    <a href="#" class="text-red-500 hover:underline">Cancelar</a>
+        <!-- Modal -->
+        <template x-if="showModal">
+            <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-8">
+                    <div class="flex justify-between items-center pb-4 border-b">
+                        <h2 class="text-2xl font-bold text-purple-700">Agendar Nueva Cita</h2>
+                        <button @click="showModal = false" class="text-gray-700 hover:text-gray-900 text-3xl">&times;</button>
+                    </div>
+                    <form class="space-y-6 pt-6" @submit.prevent="addAppointment">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="date" class="block text-gray-700 font-medium">Fecha</label>
+                                <input type="date" id="date" x-model="form.date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                            </div>
+                            <div>
+                                <label for="time" class="block text-gray-700 font-medium">Hora</label>
+                                <input type="time" id="time" x-model="form.time" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="doctor" class="block text-gray-700 font-medium">Doctor</label>
+                            <input type="text" id="doctor" x-model="form.doctor" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <label for="specialty" class="block text-gray-700 font-medium">Especialidad</label>
+                            <input type="text" id="specialty" x-model="form.specialty" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                        </div>
+                        <div class="flex justify-end pt-4 border-t">
+                            <button @click="showModal = false" type="button" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition duration-300 shadow-md">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600 transition duration-300 shadow-md ml-2">
+                                Guardar
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </template>
@@ -103,6 +110,13 @@
                 { id: 1, date: 20, time: '10:00 AM', doctor: 'Dr. Juan Pérez', specialty: 'Cardiología' },
                 { id: 2, date: 22, time: '11:00 AM', doctor: 'Dra. María López', specialty: 'Dermatología' }
             ],
+            form: {
+                date: '',
+                time: '',
+                doctor: '',
+                specialty: ''
+            },
+            showModal: false,
             initCalendar() {
                 let now = new Date();
                 this.month = now.getMonth();
@@ -120,6 +134,21 @@
             },
             getAppointments(date) {
                 return this.appointments.filter(appointment => appointment.date === date);
+            },
+            openModal(date) {
+                this.form.date = `${this.year}-${String(this.month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+                this.showModal = true;
+            },
+            addAppointment() {
+                this.appointments.push({
+                    id: this.appointments.length + 1,
+                    date: new Date(this.form.date).getDate(),
+                    time: this.form.time,
+                    doctor: this.form.doctor,
+                    specialty: this.form.specialty
+                });
+                this.showModal = false;
+                this.getDaysInMonth();
             },
             prevMonth() {
                 this.month--;
@@ -139,11 +168,6 @@
             },
             get monthYear() {
                 return new Date(this.year, this.month).toLocaleString('default', { month: 'long', year: 'numeric' });
-            },
-            openModal(date) {
-                this.open = true;
-                this.date = date;
-                this.appointments = this.getAppointments(date);
             }
         };
     }
