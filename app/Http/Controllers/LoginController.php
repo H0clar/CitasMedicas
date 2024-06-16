@@ -50,6 +50,6 @@ class LoginController extends Controller
     {
         // Cerrar sesión
         Session::forget('logged_in');
-        return redirect()->route('login');
+        return redirect()->route('login.form');
     }
 }
