@@ -18,9 +18,8 @@
 <body class="bg-gray-100" x-data="{ sidebarOpen: false }" @click="if (sidebarOpen) sidebarOpen = false">
     <div class="flex h-screen bg-gray-100" @click.stop>
         <!-- Sidebar -->
-        <!-- Sidebar -->
         <aside class="bg-white text-gray-800 shadow-lg transition-all duration-300 transform 
-                    fixed inset-y-0 left-0 z-30 w-64 md:relative md:translate-x-0"
+                    fixed inset-y-0 left-0 z-30 w-64 md:relative md:translate-x-0 flex flex-col"
             :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
             <div class="p-6 flex items-center justify-between">
                 <a href="{{ url('/home') }}" class="text-2xl font-bold text-purple-600 flex items-center space-x-2">
@@ -28,7 +27,7 @@
                     <span>HealthConnect</span>
                 </a>
             </div>
-            <nav class="mt-10 px-4">
+            <nav class="mt-10 px-4 flex-grow">
                 <a href="{{ route('citas') }}" class="flex items-center space-x-2 py-2.5 px-4 rounded transition duration-200 hover:bg-purple-100 hover:text-purple-700">
                     <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M5 11h14M12 14v7m5-7H7m10 0a2 2 0 01-2 2h-4a2 2 0 01-2-2"></path></svg>
                     <span>Mis Citas</span>
@@ -38,11 +37,19 @@
                     <span>Agendar Cita</span>
                 </a>
             </nav>
-            <div class="absolute bottom-0 w-full p-4 text-sm text-gray-500">
+            <div class="px-4 py-6">
+                <form method="POST" action="{{ route('logout') }}" class="w-full">
+                    @csrf
+                    <button type="submit" class="flex items-center justify-center space-x-2 w-full py-2.5 px-4 rounded transition duration-200 bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V3"></path></svg>
+                        <span>Cerrar Sesión</span>
+                    </button>
+                </form>
+            </div>
+            <div class="w-full p-4 text-sm text-gray-500 mt-auto">
                 <p>&copy; 2024 HealthConnect. Todos los derechos reservados.</p>
             </div>
         </aside>
-
 
         <!-- Content area -->
         <div class="flex-1 flex flex-col overflow-hidden">

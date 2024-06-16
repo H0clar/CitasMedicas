@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class LoginController extends Controller
@@ -22,16 +23,12 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        // Credenciales fijas
-        $validEmail = 'admin@admin.cl';
-        $validPassword = '12345';
-
-        // Comprobar las credenciales
-        if ($request->email === $validEmail && $request->password === $validPassword) {
-            // Iniciar sesión (puedes implementar la lógica que necesites aquí)
-            Session::put('logged_in', true);
-            return redirect()->route('home'); // Redirigir al dashboard
+        // Intentar autenticar al usuario
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            // Autenticación exitosa, redirigir al dashboard
+            return redirect()->route('home');
         } else {
+            // Autenticación fallida, volver a la página de login con un error
             return back()->withErrors([
                 'email' => 'Las credenciales no coinciden con nuestros registros.',
             ]);
@@ -64,12 +61,10 @@ class LoginController extends Controller
         return redirect()->route('login.form')->with('success', 'Cuenta creada exitosamente. Por favor, inicia sesión.');
     }
     
-    
-
     public function logout(Request $request)
     {
         // Cerrar sesión
-        Session::forget('logged_in');
+        Auth::logout();
         return redirect()->route('login.form');
     }
 }
