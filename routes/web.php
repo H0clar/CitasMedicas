@@ -11,17 +11,17 @@ Route::get('/', function () {
 });
 
 // Rutas de autenticación
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.form');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login'); // Asegúrate de que esta ruta tenga el nombre 'login'
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [LoginController::class, 'register'])->name('register.submit');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Rutas sin protección de middleware de autenticación
-Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
-Route::get('/citas', [CitauserController::class, 'index'])->name('citas');
-
-// Ruta para la vista de inicio después de iniciar sesión
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
+// Rutas protegidas por middleware de autenticación
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+    Route::get('/citas', [CitauserController::class, 'index'])->name('citas');
+    Route::get('/home', function () {
+        return view('home');
+    })->name('home');
+});

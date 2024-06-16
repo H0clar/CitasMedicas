@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
@@ -48,23 +46,23 @@ class LoginController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-    
+
         // Crear el nuevo usuario
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => Hash::make($request->password), // Asegúrate de hashear la contraseña
             'role_id' => 2, // Asegúrate de que este ID existe en la tabla `roles`
         ]);
-    
+
         // Redirigir al usuario a la página de inicio de sesión
-        return redirect()->route('login.form')->with('success', 'Cuenta creada exitosamente. Por favor, inicia sesión.');
+        return redirect()->route('login')->with('success', 'Cuenta creada exitosamente. Por favor, inicia sesión.');
     }
-    
+
     public function logout(Request $request)
     {
         // Cerrar sesión
         Auth::logout();
-        return redirect()->route('login.form');
+        return redirect()->route('login'); // Asegúrate de que este nombre de ruta sea 'login'
     }
 }

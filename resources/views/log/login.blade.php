@@ -23,7 +23,7 @@
                 <a href="{{ url('/') }}" class="text-gray-600 hover:text-purple-600 transition duration-300">Inicio</a>
                 <a href="{{ url('/#services') }}" class="text-gray-600 hover:text-purple-600 transition duration-300">Servicios</a>
                 <a href="{{ url('/#contact') }}" class="text-gray-600 hover:text-purple-600 transition duration-300">Contacto</a>
-                <a href="{{ route('login.form') }}" class="bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600 transition duration-300">Iniciar Sesión</a>
+                <a href="{{ route('login') }}" class="bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600 transition duration-300">Iniciar Sesión</a>
             </nav>
             <button @click="isOpen = !isOpen" class="md:hidden focus:outline-none">
                 <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -36,7 +36,7 @@
                 <a href="{{ url('/') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-100 transition duration-300">Inicio</a>
                 <a href="{{ url('/#services') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-100 transition duration-300">Servicios</a>
                 <a href="{{ url('/#contact') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-100 transition duration-300">Contacto</a>
-                <a href="{{ route('login.form') }}" class="block px-3 py-2 rounded-md text-base font-medium bg-purple-500 text-white hover:bg-purple-600 transition duration-300">Iniciar Sesión</a>
+                <a href="{{ route('login') }}" class="block px-3 py-2 rounded-md text-base font-medium bg-purple-500 text-white hover:bg-purple-600 transition duration-300">Iniciar Sesión</a>
             </nav>
         </div>
     </header>
