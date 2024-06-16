@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Citas;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class CitaUserController extends Controller
+class CitauserController extends Controller
 {
     public function index()
     {

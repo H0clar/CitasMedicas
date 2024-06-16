@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\Citas\CitaUserController;
+use App\Http\Controllers\Citas\CitauserController;
 
 // Ruta para la página de bienvenida
 Route::get('/', function () {
@@ -19,7 +19,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Rutas sin protección de middleware de autenticación
 Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
-Route::get('/citas', [CitaUserController::class, 'index'])->name('citas');
+Route::get('/citas', [CitauserController::class, 'index'])->name('citas');
 
 // Ruta para la vista de inicio después de iniciar sesión
 Route::get('/home', function () {
