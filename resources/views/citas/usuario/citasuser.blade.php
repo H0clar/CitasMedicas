@@ -169,7 +169,7 @@ function calendarApp() {
                 hora: this.form.time,
                 medico_id: this.form.doctor,
                 especialidad: this.form.specialty,
-                descripcion: 'Cita médica con ' + this.form.doctor + ' - ' + this.form.specialty,
+                descripcion: 'Cita médica con ' + this.medicos.find(m => m.id === parseInt(this.form.doctor)).nombre + ' - ' + this.form.specialty,
                 user_id: {{ auth()->user()->id }}
             };
 
@@ -203,7 +203,7 @@ function calendarApp() {
             });
         },
         cargarCitas() {
-            fetch('{{ route('citas.index') }}')
+            fetch('{{ route('citas.list') }}')
                 .then(response => response.json())
                 .then(data => {
                     this.appointments = data.map(cita => {
