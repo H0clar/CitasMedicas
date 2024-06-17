@@ -170,6 +170,7 @@ function calendarApp() {
                 medico_id: this.form.doctor,
                 especialidad: this.form.specialty,
                 descripcion: 'Cita médica con ' + this.form.doctor + ' - ' + this.form.specialty,
+                user_id: {{ auth()->user()->id }}
             };
 
             fetch('{{ route('citas.store') }}', {
