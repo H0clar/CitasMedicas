@@ -25,17 +25,23 @@ class LoginController extends Controller
         // Verificar si el usuario existe en la base de datos
         $user = User::where('email', $request->email)->first();
 
-        if ($user && Hash::check($request->password, $user->password)) {
-            // Autenticar al usuario manualmente
-            Auth::login($user);
-            // Autenticación exitosa, redirigir al dashboard
-            return redirect()->route('home');
+        if ($user) {
+            if (Hash::check($request->password, $user->password)) {
+                // Autenticar al usuario manualmente
+                Auth::login($user);
+                // Autenticación exitosa, redirigir al dashboard
+                return redirect()->route('home');
+            } else {
+                \Log::info('Contraseña incorrecta para el usuario: ' . $request->email);
+            }
         } else {
-            // Credenciales incorrectas, volver a la página de login con un error
-            return back()->withErrors([
-                'email' => 'Las credenciales no coinciden con nuestros registros.',
-            ]);
+            \Log::info('Usuario no encontrado: ' . $request->email);
         }
+
+        // Credenciales incorrectas, volver a la página de login con un error
+        return back()->withErrors([
+            'email' => 'Las credenciales no coinciden con nuestros registros.',
+        ]);
     }
 
     public function showRegisterForm()
