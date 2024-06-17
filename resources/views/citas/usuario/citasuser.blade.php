@@ -3,7 +3,7 @@
 @section('title', 'Mis Citas')
 
 @section('content')
-<div x-data="calendarApp()" x-init="initCalendar" class="min-h-screen flex flex-col items-center bg-gray-100 p-4">
+<div x-data="calendarApp()" x-init="initCalendar({{ $medicos->toJson() }})" class="min-h-screen flex flex-col items-center bg-gray-100 p-4">
     <div class="w-full max-w-6xl">
         <h1 class="text-4xl font-bold text-purple-700 text-center mb-8">Mis Citas</h1>
 
@@ -77,11 +77,19 @@
                         </div>
                         <div>
                             <label for="doctor" class="block text-gray-700 font-medium">Doctor</label>
-                            <input type="text" id="doctor" x-model="form.doctor" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                            <select id="doctor" x-model="form.doctor" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                                <template x-for="medico in medicos" :key="medico.id">
+                                    <option :value="medico.nombre" x-text="medico.nombre"></option>
+                                </template>
+                            </select>
                         </div>
                         <div>
                             <label for="specialty" class="block text-gray-700 font-medium">Especialidad</label>
-                            <input type="text" id="specialty" x-model="form.specialty" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                            <select id="specialty" x-model="form.specialty" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                                <template x-for="medico in medicos" :key="medico.id">
+                                    <option :value="medico.especialidad" x-text="medico.especialidad"></option>
+                                </template>
+                            </select>
                         </div>
                         <div class="flex justify-end pt-4 border-t">
                             <button @click="showModal = false" type="button" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition duration-300 shadow-md">
@@ -117,7 +125,9 @@
                 specialty: ''
             },
             showModal: false,
-            initCalendar() {
+            medicos: [], // Inicializar arreglo de médicos
+            initCalendar(medicos) {
+                this.medicos = medicos; // Asignar los médicos recibidos
                 let now = new Date();
                 this.month = now.getMonth();
                 this.year = now.getFullYear();
