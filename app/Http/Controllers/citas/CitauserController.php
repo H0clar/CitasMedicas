@@ -9,7 +9,7 @@ use App\Models\Medico;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class CitaUserController extends Controller
+class CitauserController extends Controller
 {
     public function index()
     {
@@ -19,7 +19,6 @@ class CitaUserController extends Controller
 
     public function store(Request $request)
     {
-        // Log request data for debugging
         Log::info('Store request:', $request->all());
 
         $request->validate([
@@ -38,7 +37,6 @@ class CitaUserController extends Controller
                 'medico_id' => $request->input('doctor'),
             ]);
 
-            // Log created appointment for debugging
             Log::info('Cita creada:', $cita->toArray());
 
             return response()->json(['success' => true, 'message' => 'Cita creada exitosamente', 'id' => $cita->id, 'cita' => $cita]);
