@@ -22,14 +22,24 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        // Intentar autenticar al usuario
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            // Autenticación exitosa, redirigir al dashboard
-            return redirect()->route('home');
+        // Verificar si el usuario existe en la base de datos
+        $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            // Intentar autenticar al usuario
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                // Autenticación exitosa, redirigir al dashboard
+                return redirect()->route('home');
+            } else {
+                // Contraseña incorrecta, volver a la página de login con un error
+                return back()->withErrors([
+                    'password' => 'La contraseña es incorrecta.',
+                ]);
+            }
         } else {
-            // Autenticación fallida, volver a la página de login con un error
+            // Usuario no encontrado, volver a la página de login con un error
             return back()->withErrors([
-                'email' => 'Las credenciales no coinciden con nuestros registros.',
+                'email' => 'El correo electrónico no está registrado.',
             ]);
         }
     }
