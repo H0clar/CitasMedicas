@@ -30,7 +30,10 @@ class MedicoSeeder extends Seeder
         ];
 
         foreach ($medicos as $medico) {
-            Medico::create($medico);
+            Medico::firstOrCreate(
+                ['rut' => $medico['rut']], 
+                $medico
+            );
         }
     }
 }
