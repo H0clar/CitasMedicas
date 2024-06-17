@@ -106,10 +106,7 @@
             daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
             blankDays: [],
             daysInMonth: [],
-            appointments: [
-                { id: 1, date: 20, time: '10:00 AM', doctor: 'Dr. Juan Pérez', specialty: 'Cardiología' },
-                { id: 2, date: 22, time: '11:00 AM', doctor: 'Dra. María López', specialty: 'Dermatología' }
-            ],
+            appointments: [],
             form: {
                 date: '',
                 time: '',
@@ -140,15 +137,33 @@
                 this.showModal = true;
             },
             addAppointment() {
-                this.appointments.push({
-                    id: this.appointments.length + 1,
-                    date: new Date(this.form.date).getDate(),
-                    time: this.form.time,
-                    doctor: this.form.doctor,
-                    specialty: this.form.specialty
+                fetch('/citas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify(this.form)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        this.appointments.push({
+                            id: this.appointments.length + 1,
+                            date: new Date(this.form.date).getDate(),
+                            time: this.form.time,
+                            doctor: this.form.doctor,
+                            specialty: this.form.specialty
+                        });
+                        this.showModal = false;
+                        this.getDaysInMonth();
+                    } else {
+                        alert('Hubo un problema al crear la cita');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
-                this.showModal = false;
-                this.getDaysInMonth();
             },
             prevMonth() {
                 this.month--;

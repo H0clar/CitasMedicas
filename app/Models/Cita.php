@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +12,7 @@ class Cita extends Model
     protected $table = 'citas';
 
     protected $fillable = [
-        'user_id', 'fecha', 'hora', 'descripcion',
+        'user_id', 'fecha', 'hora', 'doctor', 'especialidad',
     ];
 
     public function user()
