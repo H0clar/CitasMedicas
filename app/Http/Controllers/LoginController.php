@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -59,19 +60,20 @@ class LoginController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-    
+
         // Crear el nuevo usuario
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password, // La mutación en el modelo se encargará de hashear la contraseña
             'role_id' => 2, // Asegúrate de que este ID existe en la tabla `roles`
+            'remember_token' => Str::random(10),
+            'email_verified_at' => now(),
         ]);
-    
+
         // Redirigir al usuario a la página de inicio de sesión
         return redirect()->route('login')->with('success', 'Cuenta creada exitosamente. Por favor, inicia sesión.');
     }
-    
 
     public function logout(Request $request)
     {
