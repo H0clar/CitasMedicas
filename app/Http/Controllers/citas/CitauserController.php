@@ -20,14 +20,14 @@ class CitauserController extends Controller
     public function store(Request $request)
     {
         Log::info('Store request:', $request->all());
-
+    
         $request->validate([
             'fecha' => 'required|date',
             'hora' => 'required',
             'medico_id' => 'required|integer|exists:medicos,id',
             'especialidad' => 'required|string|max:255',
         ]);
-
+    
         try {
             $cita = Cita::create([
                 'user_id' => Auth::id(),
@@ -36,15 +36,16 @@ class CitauserController extends Controller
                 'descripcion' => $request->input('descripcion', ''),
                 'medico_id' => $request->input('medico_id'),
             ]);
-
+    
             Log::info('Cita creada:', $cita->toArray());
-
+    
             return response()->json(['success' => true, 'message' => 'Cita creada exitosamente', 'cita' => $cita]);
         } catch (\Exception $e) {
             Log::error('Error al crear cita:', ['exception' => $e]);
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
+    
 
     public function list()
     {
