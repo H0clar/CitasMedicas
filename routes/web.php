@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\Citas\CitauserController;
+use App\Http\Controllers\citas\CitauserController;
 
 // Ruta para la página de bienvenida
 Route::get('/', function () {
