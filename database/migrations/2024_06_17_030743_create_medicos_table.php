@@ -8,6 +8,8 @@ class CreateMedicosTable extends Migration
 {
     public function up()
     {
+        Schema::dropIfExists('medicos'); // Asegurarse de que la tabla no exista antes de crearla
+
         Schema::create('medicos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');

@@ -30,8 +30,8 @@ class MedicoSeeder extends Seeder
         ];
 
         foreach ($medicos as $medico) {
-            Medico::firstOrCreate(
-                ['rut' => $medico['rut']], 
+            Medico::updateOrCreate(
+                ['rut' => $medico['rut']], // Campo único para verificar la existencia
                 $medico
             );
         }
