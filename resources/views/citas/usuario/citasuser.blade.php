@@ -33,17 +33,15 @@
                          :class="{'bg-purple-200': isToday(date), 'bg-gray-100': !isToday(date)}"
                          @click="openModal(date)">
                         <span class="absolute top-0 right-0 mt-1 mr-1 text-xs sm:text-sm" x-text="date"></span>
-                        <!-- Marcar el día con cita en dispositivos móviles -->
                         <template x-if="getAppointments(date).length > 0">
                             <div class="sm:hidden bg-purple-500 w-4 h-4 rounded-full"></div>
                         </template>
-                        <!-- Mostrar detalles de la cita solo en pantallas más grandes -->
                         <div class="hidden sm:block mt-6 w-full">
                             <template x-for="appointment in getAppointments(date)" :key="appointment.id">
                                 <div class="bg-white shadow-md rounded-lg p-2 mb-2 text-xs sm:text-sm">
-                                    <p class="font-semibold" x-text="appointment.time"></p>
-                                    <p x-text="appointment.doctor"></p>
-                                    <p x-text="appointment.specialty"></p>
+                                    <p class="font-semibold" x-text="appointment.hora"></p>
+                                    <p x-text="appointment.medico"></p>
+                                    <p x-text="appointment.especialidad"></p>
                                     <div class="flex justify-between mt-2">
                                         <a href="#" class="text-blue-500 hover:underline">Ver</a>
                                         <a href="#" class="text-red-500 hover:underline">Cancelar</a>
@@ -89,11 +87,7 @@
                         </div>
                         <div>
                             <label for="specialty" class="block text-gray-700 font-medium">Especialidad</label>
-                            <select id="specialty" x-model="form.specialty" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
-                                <template x-for="medico in medicos" :key="medico.id">
-                                    <option :value="medico.especialidad" x-text="medico.especialidad"></option>
-                                </template>
-                            </select>
+                            <input type="text" id="specialty" x-model="form.specialty" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50" readonly>
                         </div>
                         <div class="flex justify-end pt-4 border-t">
                             <button @click="showModal = false" type="button" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition duration-300 shadow-md">
@@ -111,121 +105,140 @@
 </div>
 
 <script>
-    function calendarApp() {
-        return {
-            month: '',
-            year: '',
-            daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-            blankDays: [],
-            daysInMonth: [],
-            appointments: [
-                { id: 1, date: 20, time: '10:00 AM', doctor: 'Dr. Juan Pérez', specialty: 'Cardiología' },
-                { id: 2, date: 22, time: '11:00 AM', doctor: 'Dra. María López', specialty: 'Dermatología' }
-            ],
-            form: {
-                date: '',
-                time: '',
-                doctor: '',
-                specialty: ''
-            },
-            showModal: false,
-            medicos: [], // Inicializar arreglo de médicos
-            horariosDisponibles: [], // Inicializar arreglo de horarios disponibles
-            initCalendar(medicos) {
-                this.medicos = medicos; // Asignar los médicos recibidos
-                let now = new Date();
-                this.month = now.getMonth();
-                this.year = now.getFullYear();
-                this.getDaysInMonth();
-            },
-            getDaysInMonth() {
-                let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
-                this.blankDays = Array.from({ length: new Date(this.year, this.month, 1).getDay() });
-                this.daysInMonth = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-            },
-            isToday(date) {
-                const today = new Date();
-                return date === today.getDate() && this.month === today.getMonth() && this.year === today.getFullYear();
-            },
-            getAppointments(date) {
-                return this.appointments.filter(appointment => appointment.date === date);
-            },
-            openModal(date) {
-                this.form.date = `${this.year}-${String(this.month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
-                this.showModal = true;
-            },
-            cargarHorarios() {
-                if (this.form.doctor) {
-                    fetch(`/medicos/${this.form.doctor}/horarios`)
-                        .then(response => response.json())
-                        .then(data => {
-                            this.horariosDisponibles = data;
-                        })
-                        .catch(error => {
-                            console.error('Error al cargar los horarios:', error);
-                        });
-                } else {
-                    this.horariosDisponibles = [];
-                }
-            },
-            addAppointment() {
-                const formData = {
-                    fecha: this.form.date,
-                    hora: this.form.time,
-                    doctor: this.form.doctor,
-                    especialidad: this.form.specialty,
-                    descripcion: 'Cita médica con ' + this.form.doctor + ' - ' + this.form.specialty,
-                };
+function calendarApp() {
+    return {
+        month: '',
+        year: '',
+        daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+        blankDays: [],
+        daysInMonth: [],
+        appointments: [],
+        form: {
+            date: '',
+            time: '',
+            doctor: '',
+            specialty: ''
+        },
+        showModal: false,
+        medicos: [],
+        horariosDisponibles: [],
+        selectedSpecialty: '',
+        initCalendar(medicos) {
+            this.medicos = medicos;
+            let now = new Date();
+            this.month = now.getMonth();
+            this.year = now.getFullYear();
+            this.getDaysInMonth();
+            this.cargarCitas();
+        },
+        getDaysInMonth() {
+            let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
+            this.blankDays = Array.from({ length: new Date(this.year, this.month, 1).getDay() });
+            this.daysInMonth = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+        },
+        isToday(date) {
+            const today = new Date();
+            return date === today.getDate() && this.month === today.getMonth() && this.year === today.getFullYear();
+        },
+        getAppointments(date) {
+            return this.appointments.filter(appointment => new Date(appointment.fecha).getDate() === date);
+        },
+        openModal(date) {
+            this.form.date = `${this.year}-${String(this.month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+            this.showModal = true;
+        },
+        cargarHorarios() {
+            if (this.form.doctor) {
+                const medico = this.medicos.find(m => m.id === parseInt(this.form.doctor));
+                this.form.specialty = medico.especialidad;
+                fetch(`/medicos/${this.form.doctor}/horarios`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.horariosDisponibles = data.map(horario => horario.trim());
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar los horarios:', error);
+                    });
+            } else {
+                this.horariosDisponibles = [];
+            }
+        },
+        addAppointment() {
+            const formData = {
+                fecha: this.form.date,
+                hora: this.form.time,
+                medico_id: this.form.doctor,
+                especialidad: this.form.specialty,
+                descripcion: 'Cita médica con ' + this.form.doctor + ' - ' + this.form.specialty,
+            };
 
-                fetch('{{ route('citas.store') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify(formData)
-                })
+            fetch('{{ route('citas.store') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.appointments.push({
+                        id: data.cita.id,
+                        fecha: data.cita.fecha,
+                        hora: data.cita.hora,
+                        medico: this.medicos.find(m => m.id === parseInt(data.cita.medico_id)).nombre,
+                        especialidad: this.form.specialty
+                    });
+                    this.showModal = false;
+                    this.getDaysInMonth();
+                } else {
+                    alert(data.message || 'Error al guardar la cita');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al guardar la cita');
+            });
+        },
+        cargarCitas() {
+            fetch('{{ route('citas.index') }}')
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        this.appointments.push({
-                            id: data.id,
-                            date: new Date(this.form.date).getDate(),
-                            time: this.form.time,
-                            doctor: this.form.doctor,
-                            specialty: this.form.specialty
-                        });
-                        this.showModal = false;
-                        this.getDaysInMonth();
-                    } else {
-                        alert(data.message || 'Error al guardar la cita');
-                    }
+                    this.appointments = data.map(cita => {
+                        return {
+                            id: cita.id,
+                            fecha: cita.fecha,
+                            hora: cita.hora,
+                            medico: this.medicos.find(m => m.id === cita.medico_id).nombre,
+                            especialidad: this.medicos.find(m => m.id === cita.medico_id).especialidad
+                        };
+                    });
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error al guardar la cita');
+                    console.error('Error al cargar las citas:', error);
                 });
-            },
-            prevMonth() {
-                this.month--;
-                if (this.month < 0) {
-                    this.month = 11;
-                    this.year--;
-                }
-                this.getDaysInMonth();
-            },
-            nextMonth() {
-                this.month++;
-                if (this.month > 11) {
-                    this.month = 0;
-                    this.year++;
-                }
-                this.getDaysInMonth();
-            },
-            get monthYear() {
-                return new Date(this.year, this.month).toLocaleString('default', { month: 'long', year: 'numeric' });
+        },
+        prevMonth() {
+            this.month--;
+            if (this.month < 0) {
+                this.month = 11;
+                this.year--;
             }
-        };
-    }
+            this.getDaysInMonth();
+        },
+        nextMonth() {
+            this.month++;
+            if (this.month > 11) {
+                this.month = 0;
+                this.year++;
+            }
+            this.getDaysInMonth();
+        },
+        get monthYear() {
+            return new Date(this.year, this.month).toLocaleString('default', { month: 'long', year: 'numeric' });
+        }
+    };
+}
 </script>
 @endsection
