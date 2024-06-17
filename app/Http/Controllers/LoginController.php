@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash; // Añadir esta línea
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class LoginController extends Controller
@@ -26,8 +26,10 @@ class LoginController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
-            // Intentar autenticar al usuario
-            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            // Verificar si la contraseña es correcta
+            if (Hash::check($request->password, $user->password)) {
+                // Autenticar al usuario manualmente
+                Auth::login($user);
                 // Autenticación exitosa, redirigir al dashboard
                 return redirect()->route('home');
             } else {
