@@ -11,7 +11,7 @@ class CreateCitasTable extends Migration
         Schema::create('citas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('medico_id')->constrained('medicos')->onDelete('cascade');
+            $table->foreignId('medico_id')->constrained('medicos')->onDelete('cascade'); 
             $table->date('fecha');
             $table->time('hora');
             $table->text('descripcion')->nullable();

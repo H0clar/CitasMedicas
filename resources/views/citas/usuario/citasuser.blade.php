@@ -72,14 +72,18 @@
                             </div>
                             <div>
                                 <label for="time" class="block text-gray-700 font-medium">Hora</label>
-                                <input type="time" id="time" x-model="form.time" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                                <select id="time" x-model="form.time" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                                    <template x-for="horario in horariosDisponibles" :key="horario">
+                                        <option :value="horario" x-text="horario"></option>
+                                    </template>
+                                </select>
                             </div>
                         </div>
                         <div>
                             <label for="doctor" class="block text-gray-700 font-medium">Doctor</label>
-                            <select id="doctor" x-model="form.doctor" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                            <select id="doctor" x-model="form.doctor" @change="cargarHorarios" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
                                 <template x-for="medico in medicos" :key="medico.id">
-                                    <option :value="medico.nombre" x-text="medico.nombre"></option>
+                                    <option :value="medico.id" x-text="medico.nombre"></option>
                                 </template>
                             </select>
                         </div>
@@ -126,6 +130,7 @@
             },
             showModal: false,
             medicos: [], // Inicializar arreglo de médicos
+            horariosDisponibles: [], // Inicializar arreglo de horarios disponibles
             initCalendar(medicos) {
                 this.medicos = medicos; // Asignar los médicos recibidos
                 let now = new Date();
@@ -148,6 +153,20 @@
             openModal(date) {
                 this.form.date = `${this.year}-${String(this.month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
                 this.showModal = true;
+            },
+            cargarHorarios() {
+                if (this.form.doctor) {
+                    fetch(`/medicos/${this.form.doctor}/horarios`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.horariosDisponibles = data;
+                        })
+                        .catch(error => {
+                            console.error('Error al cargar los horarios:', error);
+                        });
+                } else {
+                    this.horariosDisponibles = [];
+                }
             },
             addAppointment() {
                 const formData = {

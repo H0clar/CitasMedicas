@@ -21,17 +21,28 @@ class CitaUserController extends Controller
         $request->validate([
             'fecha' => 'required|date',
             'hora' => 'required',
-            'doctor' => 'required|string|max:255',
+            'doctor' => 'required|integer|exists:medicos,id',
             'especialidad' => 'required|string|max:255',
         ]);
 
-        $cita = Cita::create([
-            'user_id' => Auth::id(),
-            'fecha' => $request->input('fecha'),
-            'hora' => $request->input('hora'),
-            'descripcion' => $request->input('descripcion'),
-        ]);
+        try {
+            $cita = Cita::create([
+                'user_id' => Auth::id(),
+                'fecha' => $request->input('fecha'),
+                'hora' => $request->input('hora'),
+                'descripcion' => $request->input('descripcion', ''),
+                'medico_id' => $request->input('doctor'),
+            ]);
 
-        return response()->json(['success' => true, 'message' => 'Cita creada exitosamente', 'id' => $cita->id]);
+            return response()->json(['success' => true, 'message' => 'Cita creada exitosamente', 'id' => $cita->id]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function getHorarios(Medico $medico)
+    {
+        $horarios = explode(',', $medico->horario_atencion);
+        return response()->json($horarios);
     }
 }
