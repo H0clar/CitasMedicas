@@ -28,7 +28,7 @@
                 </a>
             </div>
             <nav class="mt-10 px-4 flex-grow">
-                <a href="{{ route('citas') }}" class="flex items-center space-x-2 py-2.5 px-4 rounded transition duration-200 hover:bg-purple-100 hover:text-purple-700">
+                <a href="{{ route('citas.index') }}" class="flex items-center space-x-2 py-2.5 px-4 rounded transition duration-200 hover:bg-purple-100 hover:text-purple-700">
                     <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M5 11h14M12 14v7m5-7H7m10 0a2 2 0 01-2 2h-4a2 2 0 01-2-2"></path></svg>
                     <span>Mis Citas</span>
                 </a>

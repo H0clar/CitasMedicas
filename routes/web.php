@@ -17,9 +17,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
-    Route::get('/citas', [CitauserController::class, 'index'])->name('citas');
+    Route::get('/citas', [CitauserController::class, 'index'])->name('citas.index');
     Route::post('/citas', [CitauserController::class, 'store'])->name('citas.store');
-    Route::get('/citas/list', [CitauserController::class, 'list'])->name('citas.index');
+    Route::get('/citas/list', [CitauserController::class, 'list'])->name('citas.list');
     Route::get('/medicos/{medico}/horarios', [CitauserController::class, 'getHorarios'])->name('medicos.horarios');
     Route::get('/home', function () {
         return view('home');
