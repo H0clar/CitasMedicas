@@ -24,13 +24,13 @@ class CitaUserController extends Controller
             'especialidad' => 'required|string|max:255',
         ]);
 
-        Cita::create([
+        $cita = Cita::create([
             'user_id' => Auth::id(),
             'fecha' => $request->input('fecha'),
             'hora' => $request->input('hora'),
             'descripcion' => $request->input('descripcion'),
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Cita creada exitosamente']);
+        return response()->json(['success' => true, 'message' => 'Cita creada exitosamente', 'id' => $cita->id]);
     }
 }

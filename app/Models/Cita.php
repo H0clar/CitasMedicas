@@ -12,11 +12,16 @@ class Cita extends Model
     protected $table = 'citas';
 
     protected $fillable = [
-        'user_id', 'fecha', 'hora', 'doctor', 'especialidad',
+        'user_id', 'medico_id', 'fecha', 'hora',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function medico()
+    {
+        return $this->belongsTo(Medico::class);
     }
 }

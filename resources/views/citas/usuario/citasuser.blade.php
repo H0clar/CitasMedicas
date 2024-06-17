@@ -106,7 +106,10 @@
             daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
             blankDays: [],
             daysInMonth: [],
-            appointments: [],
+            appointments: [
+                { id: 1, date: 20, time: '10:00 AM', doctor: 'Dr. Juan Pérez', specialty: 'Cardiología' },
+                { id: 2, date: 22, time: '11:00 AM', doctor: 'Dra. María López', specialty: 'Dermatología' }
+            ],
             form: {
                 date: '',
                 time: '',
@@ -137,19 +140,27 @@
                 this.showModal = true;
             },
             addAppointment() {
-                fetch('/citas', {
+                const formData = {
+                    fecha: this.form.date,
+                    hora: this.form.time,
+                    doctor: this.form.doctor,
+                    especialidad: this.form.specialty,
+                    descripcion: 'Cita médica con ' + this.form.doctor + ' - ' + this.form.specialty,
+                };
+
+                fetch('{{ route('citas.store') }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    body: JSON.stringify(this.form)
+                    body: JSON.stringify(formData)
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         this.appointments.push({
-                            id: this.appointments.length + 1,
+                            id: data.id,
                             date: new Date(this.form.date).getDate(),
                             time: this.form.time,
                             doctor: this.form.doctor,
@@ -158,11 +169,12 @@
                         this.showModal = false;
                         this.getDaysInMonth();
                     } else {
-                        alert('Hubo un problema al crear la cita');
+                        alert(data.message || 'Error al guardar la cita');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                    alert('Error al guardar la cita');
                 });
             },
             prevMonth() {
