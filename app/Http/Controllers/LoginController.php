@@ -26,6 +26,8 @@ class LoginController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
+            \Log::info('Usuario encontrado: ' . $request->email);
+            \Log::info('Contraseña en DB: ' . $user->password);
             if (Hash::check($request->password, $user->password)) {
                 // Autenticar al usuario manualmente
                 Auth::login($user);
