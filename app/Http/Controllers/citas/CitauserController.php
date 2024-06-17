@@ -6,7 +6,7 @@ use App\Models\Cita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CitaController extends Controller
+class CitauserController extends Controller
 {
     public function store(Request $request)
     {
