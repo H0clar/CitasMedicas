@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@admin.cl',
             'email_verified_at' => now(),
-            'password' => Hash::make('123456789'),
+            'password' => Hash::make('123456789'), // Encripta la contraseña
             'role_id' => 1, // Asumiendo que el role_id para el administrador es 1
             'remember_token' => Str::random(10),
             'created_at' => now(),
