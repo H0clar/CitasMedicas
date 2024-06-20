@@ -1,47 +1,48 @@
--- Crear tabla roles
+-- Create table for roles
 CREATE TABLE roles (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL
 );
 
--- Crear tabla users
+-- Create table for users
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     email_verified_at TIMESTAMP NULL DEFAULT NULL,
     password VARCHAR(255) NOT NULL,
-    remember_token VARCHAR(100) NULL DEFAULT NULL,
-    role_id INT,
+    role_id BIGINT UNSIGNED NOT NULL,
+    remember_token VARCHAR(100) DEFAULT NULL,
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL,
-    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL
+    CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 
--- Crear tabla medicos
+-- Create table for medicos
 CREATE TABLE medicos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
-    rut VARCHAR(20) NOT NULL UNIQUE,
-    telefono VARCHAR(20) NOT NULL,
+    rut VARCHAR(255) NOT NULL UNIQUE,
+    telefono VARCHAR(255) DEFAULT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     especialidad VARCHAR(255) NOT NULL,
-    horario_atencion VARCHAR(255) NOT NULL,
+    horario_atencion VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL
 );
 
--- Crear tabla citas
+-- Create table for citas
 CREATE TABLE citas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    medico_id INT,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NOT NULL,
+    medico_id BIGINT UNSIGNED NOT NULL,
     fecha DATE NOT NULL,
     hora TIME NOT NULL,
+    descripcion VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (medico_id) REFERENCES medicos(id) ON DELETE CASCADE
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_medico_id FOREIGN KEY (medico_id) REFERENCES medicos(id) ON DELETE CASCADE
 );

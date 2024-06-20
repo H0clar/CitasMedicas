@@ -7,16 +7,18 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
 </head>
 <body class="bg-purple-50 text-gray-800">
     <!-- Navbar -->
     <header x-data="{ isOpen: false }" class="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
         <div class="container mx-auto flex items-center justify-between py-4 px-6">
-            <a href="#" class="text-2xl font-bold text-purple-600">HealthConnect</a>
+            <a href="#home" class="text-2xl font-bold text-purple-600">HealthConnect</a>
 
             <nav class="hidden md:flex space-x-6 items-center">
-                <a href="#home" class="text-gray-600 hover:text-purple-600 transition duration-300">Inicio</a>
                 <a href="#services" class="text-gray-600 hover:text-purple-600 transition duration-300">Servicios</a>
+                <a href="#team" class="text-gray-600 hover:text-purple-600 transition duration-300">Equipo</a>
                 <a href="#contact" class="text-gray-600 hover:text-purple-600 transition duration-300">Contacto</a>
                 <a href="/login" class="bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600 transition duration-300">Iniciar Sesión</a>
             </nav>
@@ -26,12 +28,12 @@
                 </svg>
             </button>
         </div>
-        <div x-show="isOpen" @click.away="isOpen = false" class="md:hidden bg-white shadow-lg">
+        <div x-show="isOpen" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 -translate-y-10" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-300 transform" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-10" @click.away="isOpen = false" class="md:hidden bg-white shadow-lg">
             <nav class="px-4 pt-2 pb-4 space-y-1 text-center">
-                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-100 transition duration-300">Inicio</a>
-                <a href="#services" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-100 transition duration-300">Servicios</a>
-                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-100 transition duration-300">Contacto</a>
-                <a href="/login" class="block px-3 py-2 rounded-md text-base font-medium bg-purple-500 text-white hover:bg-purple-600 transition duration-300">Iniciar Sesión</a>
+                <a href="#services" @click="isOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-100 transition duration-300">Servicios</a>
+                <a href="#team" @click="isOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-100 transition duration-300">Equipo</a>
+                <a href="#contact" @click="isOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-100 transition duration-300">Contacto</a>
+                <a href="/login" @click="isOpen = false" class="block px-3 py-2 rounded-md text-base font-medium bg-purple-500 text-white hover:bg-purple-600 transition duration-300">Iniciar Sesión</a>
             </nav>
         </div>
     </header>
@@ -48,49 +50,85 @@
                 <a href="/login" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-8 rounded-full hover:from-purple-600 hover:to-pink-600 transition duration-300 inline-block shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg font-semibold">¡Únete Ahora!</a>
             </div>
             <div class="md:w-1/2 mt-10 md:mt-0">
-                <img src="https://placehold.co/600x400" alt="Ilustración de servicios médicos" class="rounded-lg shadow-2xl">
+                <img src="img/landing/home/medicos.png" alt="Ilustración de servicios médicos" class="rounded-lg shadow-2xl">
             </div>
         </div>
     </section>
 
     <!-- Servicios Section -->
-    <section id="services" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center text-purple-700 mb-8">Nuestros Servicios</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-purple-100 rounded-lg p-6 shadow-md hover:shadow-lg transition duration-300">
-                    <svg class="w-12 h-12 text-purple-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <section id="services" class="flex items-center justify-center min-h-screen py-20 bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 overflow-hidden">
+        <div class="container mx-auto px-4 md:px-6">
+            <h2 class="text-3xl font-bold text-center text-purple-700 mb-12" data-aos="fade-up">Nuestros Servicios</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                <div class="bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-lg p-6 md:p-8 shadow-md hover:shadow-lg transition duration-300" data-aos="flip-left" data-aos-offset="200" data-aos-delay="100">
+                    <svg class="w-16 h-16 text-purple-600 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
-                    <h3 class="text-xl font-semibold mb-2 text-purple-700">Citas en Línea</h3>
-                    <p class="text-gray-600">Agenda tus citas médicas de forma rápida y sencilla desde cualquier dispositivo.</p>
+                    <h3 class="text-2xl font-semibold mb-4 text-purple-700">Agenda de Citas</h3>
+                    <p class="text-gray-700 mb-4">Permite a los pacientes agendar sus citas médicas de forma rápida y sencilla desde cualquier dispositivo.</p>
+                    <a href="#" class="text-purple-600 hover:text-purple-700 font-semibold transition duration-300">Descubre más</a>
                 </div>
-                <div class="bg-purple-100 rounded-lg p-6 shadow-md hover:shadow-lg transition duration-300">
-                    <svg class="w-12 h-12 text-purple-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <div class="bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-lg p-6 md:p-8 shadow-md hover:shadow-lg transition duration-300" data-aos="zoom-in" data-aos-offset="200" data-aos-delay="200">
+                    <svg class="w-16 h-16 text-purple-600 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                     </svg>
-                    <h3 class="text-xl font-semibold mb-2 text-purple-700">Historial Médico Digital</h3>
-                    <p class="text-gray-600">Accede a tu historial médico completo en cualquier momento y lugar de forma segura.</p>
+                    <h3 class="text-2xl font-semibold mb-4 text-purple-700">Gestión de Citas para Médicos</h3>
+                    <p class="text-gray-700 mb-4">Los médicos pueden acceder y gestionar sus citas del día de manera eficiente, mejorando la organización y atención al paciente.</p>
+                    <a href="#" class="text-purple-600 hover:text-purple-700 font-semibold transition duration-300">Descubre más</a>
                 </div>
-                <div class="bg-purple-100 rounded-lg p-6 shadow-md hover:shadow-lg transition duration-300">
-                    <svg class="w-12 h-12 text-purple-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <div class="bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-lg p-6 md:p-8 shadow-md hover:shadow-lg transition duration-300" data-aos="fade-left" data-aos-offset="200" data-aos-delay="300">
+                    <svg class="w-16 h-16 text-purple-600 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                     </svg>
-                    <h3 class="text-xl font-semibold mb-2 text-purple-700">Consultas Virtuales</h3>
-                    <p class="text-gray-600">Realiza consultas médicas desde la comodidad de tu hogar a través de videollamadas.</p>
+                    <h3 class="text-2xl font-semibold mb-4 text-purple-700">Consultas Virtuales</h3>
+                    <p class="text-gray-700 mb-4">Permite a los pacientes y médicos realizar consultas virtuales a través de videollamadas, facilitando el acceso a la atención médica sin salir de casa.</p>
+                    <a href="#" class="text-purple-600 hover:text-purple-700 font-semibold transition duration-300">Descubre más</a>
                 </div>
             </div>
         </div>
     </section>
 
+
+
+
+
+    <!-- Team Section -->
+    <!-- Team Section -->
+    <section id="team" class="min-h-screen py-20 bg-gradient-to-b from-purple-100 to-white overflow-hidden">
+        <div class="container mx-auto px-4 md:px-6">
+            <h2 class="text-4xl font-bold text-center text-purple-700 mb-12" data-aos="fade-up">Nuestro Equipo</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                <div class="bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-lg p-6 md:p-8 shadow-md hover:shadow-lg transition duration-300" data-aos="fade-up" data-aos-offset="200" data-aos-delay="100">
+                    <img src="img/landing/equipo/medico1.png" alt="Juan Pérez" class="rounded-full w-32 mx-auto mb-6 shadow-lg" data-aos="zoom-in">
+                    <h3 class="text-2xl font-semibold mb-2 text-purple-700 text-center">Juan Pérez</h3>
+                    <p class="text-gray-700 text-center">Cardiólogo</p>
+                    <p class="text-gray-600 text-center mt-4">Con más de 20 años de experiencia en la industria de la salud, Juan lidera nuestro equipo con pasión y dedicación.</p>
+                </div>
+                <div class="bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-lg p-6 md:p-8 shadow-md hover:shadow-lg transition duration-300" data-aos="fade-up" data-aos-offset="200" data-aos-delay="200">
+                    <img src="img/landing/equipo/medico3.png" alt="Ana García" class="rounded-full w-32 mx-auto mb-6 shadow-lg" data-aos="zoom-in">
+                    <h3 class="text-2xl font-semibold mb-2 text-purple-700 text-center">Ana García</h3>
+                    <p class="text-gray-700 text-center">Pediatra</p>
+                    <p class="text-gray-600 text-center mt-4">Especialista en medicina interna, Ana supervisa la calidad y eficacia de nuestros servicios médicos.</p>
+                </div>
+                <div class="bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-lg p-6 md:p-8 shadow-md hover:shadow-lg transition duration-300" data-aos="fade-up" data-aos-offset="200" data-aos-delay="300">
+                    <img src="img/landing/equipo/medico2.png" alt="Carlos López" class="rounded-full w-32 mx-auto mb-6 shadow-lg" data-aos="zoom-in">
+                    <h3 class="text-2xl font-semibold mb-2 text-purple-700 text-center">Carlos López</h3>
+                    <p class="text-gray-700 text-center">Dermatólogo</p>
+                    <p class="text-gray-600 text-center mt-4">Con un fuerte enfoque en la innovación tecnológica, Carlos lidera el desarrollo y mantenimiento de nuestras plataformas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-gradient-to-b from-purple-100 to-white">
-        <div class="container mx-auto px-6">
+    <section id="contact" class="min-h-screen py-20 bg-gradient-to-b from-purple-100 to-white">
+        <div class="container mx-auto px-6 h-full flex flex-col justify-center">
             <h2 class="text-4xl font-bold text-center text-purple-700 mb-12">Contáctanos</h2>
-            <div class="flex flex-wrap -mx-4">
+            <div class="flex flex-wrap -mx-4 items-center">
                 <!-- Formulario de contacto -->
                 <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0">
-                    <form class="bg-white shadow-lg rounded-lg p-8">
+                    <form class="bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg shadow-lg rounded-lg p-8">
                         <div class="mb-6">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
                                 Nombre
@@ -118,7 +156,7 @@
                 </div>
                 <!-- Información de contacto -->
                 <div class="w-full lg:w-1/2 px-4">
-                    <div class="bg-purple-600 text-white rounded-lg shadow-lg p-8 h-full">
+                    <div class="bg-purple-600 text-white bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8 h-full">
                         <h3 class="text-2xl font-semibold mb-6">Información de Contacto</h3>
                         <div class="mb-6">
                             <h4 class="text-lg font-semibold mb-2">Dirección</h4>
@@ -148,37 +186,19 @@
         <div class="container mx-auto px-6 py-10">
             <div class="flex flex-wrap">
                 <!-- Logo y descripción -->
-                <div class="w-full md:w-1/4 text-center md:text-left">
+                <div class="w-full md:w-1/2 text-center md:text-left mb-6 md:mb-0">
                     <h1 class="text-2xl font-bold mb-2">HealthConnect</h1>
-                    <p class="text-gray-300 mb-4">Conectando pacientes y profesionales de la salud de manera eficiente.</p>
+                    <p class="text-gray-300">Conectando pacientes y profesionales de la salud.</p>
                 </div>
 
                 <!-- Enlaces rápidos -->
-                <div class="w-full md:w-1/4 mt-8 md:mt-0">
-                    <h3 class="text-lg font-semibold mb-2">Enlaces Rápidos</h3>
-                    <ul class="text-gray-300">
-                        <li class="mb-2"><a href="#home" class="hover:text-white transition duration-300">Inicio</a></li>
-                        <li class="mb-2"><a href="#services" class="hover:text-white transition duration-300">Servicios</a></li>
-                        <li class="mb-2"><a href="#contact" class="hover:text-white transition duration-300">Contacto</a></li>
+                <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+                    <ul class="text-gray-300 flex space-x-4">
+                        <li><a href="#home" class="hover:text-white transition duration-300">Inicio</a></li>
+                        <li><a href="#services" class="hover:text-white transition duration-300">Servicios</a></li>
+                        <li><a href="#team" class="hover:text-white transition duration-300">Equipo</a></li>
+                        <li><a href="#contact" class="hover:text-white transition duration-300">Contacto</a></li>
                     </ul>
-                </div>
-
-                <!-- Servicios -->
-                <div class="w-full md:w-1/4 mt-8 md:mt-0">
-                    <h3 class="text-lg font-semibold mb-2">Nuestros Servicios</h3>
-                    <ul class="text-gray-300">
-                        <li class="mb-2">Citas en Línea</li>
-                        <li class="mb-2">Historial Médico Digital</li>
-                        <li class="mb-2">Consultas Virtuales</li>
-                    </ul>
-                </div>
-
-                <!-- Contacto -->
-                <div class="w-full md:w-1/4 mt-8 md:mt-0">
-                    <h3 class="text-lg font-semibold mb-2">Contacto</h3>
-                    <p class="text-gray-300 mb-2">123 Calle Salud, Ciudad Médica</p>
-                    <p class="text-gray-300 mb-2">Teléfono: (123) 456-7890</p>
-                    <p class="text-gray-300">Email: info@healthconnect.com</p>
                 </div>
             </div>
 
@@ -208,5 +228,7 @@
             </div>
         </div>
     </footer>
+
+    <script src="/js/welcome/welcome.js"></script>
 </body>
 </html>
