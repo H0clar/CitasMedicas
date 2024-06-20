@@ -28,7 +28,7 @@
                 </svg>
             </button>
         </div>
-        <div x-show="isOpen" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 -translate-y-10" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-300 transform" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-10" @click.away="isOpen = false" class="md:hidden bg-white shadow-lg">
+        <div x-show="isOpen" @click.away="isOpen = false" class="md:hidden bg-white shadow-lg">
             <nav class="px-4 pt-2 pb-4 space-y-1 text-center">
                 <a href="#services" @click="isOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-100 transition duration-300">Servicios</a>
                 <a href="#team" @click="isOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-100 transition duration-300">Equipo</a>
