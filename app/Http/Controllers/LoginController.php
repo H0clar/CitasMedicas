@@ -58,7 +58,7 @@ class LoginController extends Controller
                 return redirect()->route('dashboard');
             case 3:
                 // Redirigir al dashboard de médicos
-                return redirect()->route('medico.dashboard');
+                return redirect()->route('medico.home'); // Ruta corregida
             default:
                 // Redirigir a una página por defecto si el rol no es reconocido
                 return redirect()->route('home');

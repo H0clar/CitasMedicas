@@ -1,7 +1,5 @@
 <?php
 
-// web.php
-// web.php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
@@ -28,18 +26,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', function () {
         return view('home');
     })->name('home');
-    Route::get('/medico/dashboard', [HomeMedicoController::class, 'home'])->name('medico.home');
+    Route::get('/medico/dashboard', [HomeMedicoController::class, 'home'])->name('medico.home'); // Ruta corregida
     
     // Ruta para generar enlaces firmados
     Route::get('/generate-link', function () {
-        $url = URL::signedRoute('medico.dashboard');
+        $url = URL::signedRoute('medico.home'); // Ruta corregida
         return $url;
     })->name('generate.link');
 });
-
-
-
-
-
 
 Route::get('/medico/agenda', [AgendaMedicoController::class, 'index'])->name('medico.agenda');
