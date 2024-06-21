@@ -32,8 +32,8 @@ class LoginController extends Controller
             if (Hash::check($request->password, $user->password)) {
                 // Autenticar al usuario manualmente
                 Auth::login($user);
-                // Autenticación exitosa, redirigir al dashboard
-                return redirect()->route('home');
+                // Autenticación exitosa, redirigir según el rol
+                return $this->redirectUserBasedOnRole($user);
             } else {
                 \Log::info('Contraseña incorrecta para el usuario: ' . $request->email);
             }
@@ -45,6 +45,24 @@ class LoginController extends Controller
         return back()->withErrors([
             'email' => 'Las credenciales no coinciden con nuestros registros.',
         ]);
+    }
+
+    protected function redirectUserBasedOnRole($user)
+    {
+        switch ($user->role_id) {
+            case 1:
+                // Redirigir al dashboard general
+                return redirect()->route('home');
+            case 2:
+                // Redirigir al dashboard de usuarios
+                return redirect()->route('dashboard');
+            case 3:
+                // Redirigir al dashboard de médicos
+                return redirect()->route('medico.dashboard');
+            default:
+                // Redirigir a una página por defecto si el rol no es reconocido
+                return redirect()->route('home');
+        }
     }
 
     public function showRegisterForm()

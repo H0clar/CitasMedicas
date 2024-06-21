@@ -1,9 +1,13 @@
 <?php
 
+// web.php
+// web.php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\citas\CitauserController;
+use App\Http\Controllers\medico\HomeMedicoController;
+use App\Http\Controllers\medico\AgendaMedicoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,4 +28,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', function () {
         return view('home');
     })->name('home');
+    Route::get('/medico/dashboard', [HomeMedicoController::class, 'home'])->name('medico.home');
+    
+    // Ruta para generar enlaces firmados
+    Route::get('/generate-link', function () {
+        $url = URL::signedRoute('medico.dashboard');
+        return $url;
+    })->name('generate.link');
 });
+
+
+
+
+
+
+Route::get('/medico/agenda', [AgendaMedicoController::class, 'index'])->name('medico.agenda');

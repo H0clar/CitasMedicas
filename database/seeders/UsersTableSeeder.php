@@ -27,6 +27,14 @@ class UsersTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'Medico',
+                'email' => 'medico@medico.cl',
+                'password' => Hash::make('123456789'),
+                'role_id' => 3, // Rol medico
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
