@@ -1,0 +1,12 @@
+copy .env.example .env
+
+composer install
+
+php artisan key:generate
+
+
+php artisan serve
+
+
+
+php artisan migrate:fresh --seed --force
