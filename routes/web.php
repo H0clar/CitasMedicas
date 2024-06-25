@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\citas\CitauserController;
 use App\Http\Controllers\medico\HomeMedicoController;
 use App\Http\Controllers\medico\AgendaMedicoController;
+use App\Http\Controllers\medico\GestionCitaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,6 +34,9 @@ Route::middleware(['auth'])->group(function () {
         $url = URL::signedRoute('medico.home'); // Ruta corregida
         return $url;
     })->name('generate.link');
-});
 
-Route::get('/medico/agenda', [AgendaMedicoController::class, 'index'])->name('medico.agenda');
+    // Rutas para la gestión de citas
+    Route::get('/medico/agenda', [AgendaMedicoController::class, 'index'])->name('medico.agenda');
+    Route::get('medico/gestionar-cita/{id}', [GestionCitaController::class, 'show'])->name('gestionar.cita');
+    Route::post('medico/gestionar-cita/{id}', [GestionCitaController::class, 'update'])->name('update.cita');
+});
